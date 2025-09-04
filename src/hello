@@ -1,0 +1,29 @@
+┌─────────────────────────────────────────┐
+│           INTERFACE LAYER               │ ← NestJS Components belong here
+│  Controllers, DTOs, Guards, Pipes,     │
+│  Interceptors, Filters, Mappers        │
+├─────────────────────────────────────────┤
+│         APPLICATION LAYER               │
+│  Use Cases, Services, Application      │
+│  Exceptions                            │
+├─────────────────────────────────────────┤
+│           DOMAIN LAYER                  │
+│  Entities, Value Objects, Repository   │
+│  Interfaces, Domain Exceptions         │
+├─────────────────────────────────────────┤
+│        INFRASTRUCTURE LAYER             │
+│  Repository Implementations, External  │
+│  Services, Database, APIs, etc.        │
+└─────────────────────────────────────────┘
+
+1. GUARDS (Authentication/Authorization)
+   ↓
+2. INTERCEPTORS (Before) - Request transformation, logging, caching
+   ↓
+3. PIPES (Data Transformation/Validation)
+   ↓
+4. CONTROLLER METHOD (Your business logic)
+   ↓
+5. INTERCEPTORS (After) - Response transformation, logging
+   ↓
+6. FILTERS (Exception Handling) - Only if errors occur

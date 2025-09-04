@@ -1,0 +1,67 @@
+import { BaseEntity } from '../../../common/domain/entities/base.entity';
+import { TimestampVO } from '../../../common/domain/value_objects/timestamp.vo';
+import { UlidVO } from '../../../common/domain/value_objects/ulid.vo';
+import { UserRole } from '../enums/user-role.enum';
+import { EmailVO } from '../value_objects/email.vo';
+
+export class UserEntity extends BaseEntity {
+  private readonly _email: EmailVO;
+  private readonly _role: UserRole;
+
+  private constructor(
+    id: UlidVO,
+    createdAt: TimestampVO,
+    updatedAt: TimestampVO,
+    deletedAt: TimestampVO | null = null,
+    email: EmailVO,
+    role: UserRole,
+  ) {
+    super(id, createdAt, updatedAt, deletedAt);
+    this._email = email;
+    this._role = role;
+  }
+
+  /**
+   * Factory method to create a new user
+   */
+  public static createUser(email: EmailVO): UserEntity {
+    const now = new TimestampVO();
+    return new UserEntity(new UlidVO(), now, now, null, email, UserRole.USER);
+  }
+
+  /**
+   * Factory method to create a user from existing data (e.g., from database)
+   */
+  public static fromData(
+    id: UlidVO,
+    createdAt: TimestampVO,
+    updatedAt: TimestampVO,
+    deletedAt: TimestampVO | null = null,
+    email: EmailVO,
+    role: UserRole,
+  ): UserEntity {
+    return new UserEntity(id, createdAt, updatedAt, deletedAt, email, role);
+  }
+
+  public getEmail(): EmailVO {
+    return this._email;
+  }
+
+  public getRole(): UserRole {
+    return this._role;
+  }
+
+  protected override createCopyWithTimestamp(
+    updatedAt: TimestampVO,
+    deletedAt: TimestampVO | null,
+  ): UserEntity {
+    return UserEntity.fromData(
+      this.id(), // Preserve the same ID
+      this.createdAt(), // Preserve the same creation time
+      updatedAt, // Use the new updated time
+      deletedAt, // Use the new deleted time
+      this._email,
+      this._role,
+    );
+  }
+}
