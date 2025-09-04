@@ -1,6 +1,6 @@
-import { BaseEntity } from '../../../common/domain/entities/base.entity';
-import { TimestampVO } from '../../../common/domain/value_objects/timestamp.vo';
-import { UlidVO } from '../../../common/domain/value_objects/ulid.vo';
+import { BaseEntity } from 'src/common/entities/base.entity';
+import { TimestampVO } from 'src/common/value_objects/timestamp.vo';
+import { UlidVO } from 'src/common/value_objects/ulid.vo';
 import { UserRole } from '../enums/user-role.enum';
 import { EmailVO } from '../value_objects/email.vo';
 import { UsernameVO } from '../value_objects/username.vo';

@@ -1,5 +1,5 @@
 import { HttpStatus } from '@nestjs/common';
-import { BaseException } from 'src/features/common/domain/exceptions/base.exception';
+import { BaseException } from 'src/common/exceptions/base.exception';
 
 export class UserNotFoundException extends BaseException {
   static readonly CODE = 'USER_NOT_FOUND';
