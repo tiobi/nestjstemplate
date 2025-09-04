@@ -8,6 +8,20 @@ export class UlidVO {
     this._value = this._generate();
   }
 
+  static fromString(value: string): UlidVO {
+    // Basic ULID format validation (26 characters, Crockford's Base32)
+    if (
+      !value ||
+      value.length !== 26 ||
+      !/^[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}$/i.test(value)
+    ) {
+      throw new Error('Invalid ULID format');
+    }
+    const instance = Object.create(UlidVO.prototype);
+    instance._value = value.toUpperCase();
+    return instance;
+  }
+
   get value(): string {
     return this._value;
   }

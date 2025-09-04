@@ -1,0 +1,17 @@
+{
+  "enabled": true,
+  "name": "Update Schemas",
+  "description": "Automatically updates schema files when code changes are detected in the source directory",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "src/**/*.ts",
+      "src/**/*.js"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Code has been updated in the source directory. Please analyze the changes and update any relevant schema files in the src/common/schemas/ and src/features/*/interfaces/schemas/ directories to reflect the new code structure, DTOs, entities, and API endpoints."
+  }
+}

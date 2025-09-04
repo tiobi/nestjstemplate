@@ -1,0 +1,110 @@
+# Implementation Plan
+
+- [-] 1. Extend repository interface and implementation
+  - Add new methods to UserRepository interface for CRUD operations
+  - Implement the new methods in UserRepositoryImpl with Firestore queries
+  - Add proper error handling and data mapping
+  - _Requirements: 1.1, 2.1, 3.1, 4.1_
+
+- [ ] 2. Create new DTOs for request/response handling
+  - [ ] 2.1 Create UpdateUserRequestDto with validation
+    - Implement DTO class with optional email and username fields
+    - Add class-validator decorators for proper validation
+    - _Requirements: 3.3_
+  - [ ] 2.2 Create pagination DTOs
+    - Implement GetUsersQueryDto for pagination parameters
+    - Create PaginatedUsersResponseDto and PaginationMetadataDto
+    - Add validation for page and limit parameters
+    - _Requirements: 2.2, 2.3, 2.4_
+
+- [ ] 3. Implement new use cases for user operations
+  - [ ] 3.1 Create GetUserByIdUsecase
+    - Implement use case to retrieve user by ID
+    - Add proper error handling for user not found scenarios
+    - Include ID format validation
+    - _Requirements: 1.1, 1.2, 1.3_
+  - [ ] 3.2 Create GetUsersUsecase
+    - Implement paginated user listing functionality
+    - Handle default pagination values and validation
+    - Return structured response with metadata
+    - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5_
+  - [ ] 3.3 Create UpdateUserUsecase
+    - Implement user update logic with validation
+    - Handle email uniqueness and username validation
+    - Return updated user entity
+    - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5_
+  - [ ] 3.4 Create DeleteUserUsecase
+    - Implement soft delete functionality
+    - Add proper error handling for non-existent users
+    - _Requirements: 4.1, 4.2, 4.3_
+
+- [ ] 4. Create Swagger schema classes for API documentation
+  - [ ] 4.1 Create UserControllerGetUserSchemas
+    - Define decorators for GET /users/:id endpoint
+    - Include all possible response codes and examples
+    - _Requirements: 5.1, 5.2, 5.3_
+  - [ ] 4.2 Create UserControllerGetUsersSchemas
+    - Define decorators for GET /users endpoint with pagination
+    - Include query parameter documentation
+    - _Requirements: 5.1, 5.2, 5.3_
+  - [ ] 4.3 Create UserControllerUpdateUserSchemas
+    - Define decorators for PUT /users/:id endpoint
+    - Include request body and response documentation
+    - _Requirements: 5.1, 5.2, 5.3_
+  - [ ] 4.4 Create UserControllerDeleteUserSchemas
+    - Define decorators for DELETE /users/:id endpoint
+    - Include response documentation
+    - _Requirements: 5.1, 5.2, 5.3_
+
+- [ ] 5. Enhance UserController with new endpoints
+  - [ ] 5.1 Add GET /users/:id endpoint
+    - Implement controller method with proper validation
+    - Add Swagger decorators and error handling
+    - Use GetUserByIdUsecase for business logic
+    - _Requirements: 1.1, 1.2, 1.3, 5.4_
+  - [ ] 5.2 Add GET /users endpoint with pagination
+    - Implement controller method with query parameter handling
+    - Add pagination validation and default values
+    - Use GetUsersUsecase for business logic
+    - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 5.4_
+  - [ ] 5.3 Add PUT /users/:id endpoint
+    - Implement controller method with request body validation
+    - Add proper error handling for conflicts and validation
+    - Use UpdateUserUsecase for business logic
+    - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 5.4_
+  - [ ] 5.4 Add DELETE /users/:id endpoint
+    - Implement controller method with ID validation
+    - Add proper error handling for non-existent users
+    - Use DeleteUserUsecase for business logic
+    - _Requirements: 4.1, 4.2, 4.3, 5.4_
+
+- [ ] 6. Update dependency injection in UserModule
+  - Register all new use cases in the module providers
+  - Ensure proper dependency injection setup
+  - Update exports if needed for other modules
+  - _Requirements: 6.1, 6.2, 6.3, 6.4_
+
+- [ ] 7. Create comprehensive unit tests
+  - [ ] 7.1 Write tests for new use cases
+    - Test GetUserByIdUsecase with valid and invalid IDs
+    - Test GetUsersUsecase with various pagination scenarios
+    - Test UpdateUserUsecase with validation and conflict scenarios
+    - Test DeleteUserUsecase with valid and invalid IDs
+    - _Requirements: 6.1, 6.2, 6.3, 6.4_
+  - [ ] 7.2 Write tests for enhanced controller
+    - Test all new endpoints with valid and invalid inputs
+    - Verify proper HTTP status codes and response formats
+    - Test error handling scenarios
+    - _Requirements: 6.1, 6.2, 6.3, 6.4_
+  - [ ] 7.3 Write tests for repository implementation
+    - Test new repository methods with mock Firestore
+    - Verify query construction and data mapping
+    - Test error handling in data access layer
+    - _Requirements: 6.1, 6.2, 6.3, 6.4_
+
+- [ ] 8. Create integration tests for complete workflows
+  - Write end-to-end tests for all CRUD operations
+  - Test complete request/response cycles
+  - Verify database interactions and data persistence
+  - Test error scenarios and edge cases
+  - _Requirements: 6.1, 6.2, 6.3, 6.4_
