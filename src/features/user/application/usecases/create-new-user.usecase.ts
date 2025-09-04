@@ -1,14 +1,19 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { UserEntity } from '../../domain/entities/user.entity';
-import { EmailVO } from '../../domain/value_objects/email.vo';
 import { UserRepository } from '../../domain/repositories/user.repository.interface';
+import { EmailVO } from '../../domain/value_objects/email.vo';
+import { UsernameVO } from '../../domain/value_objects/username.vo';
 import { EmailAlreadyExistsException } from '../exceptions/email-already-exists.exception';
 
 @Injectable()
 export class CreateNewUserUsecase {
   constructor(private readonly userRepository: UserRepository) {}
 
-  async execute(email: string): Promise<UserEntity> {
+  async execute(email: string, username: string | null): Promise<UserEntity> {
+    if (!username) {
+      throw new BadRequestException('Username is required');
+    }
+
     const emailValueObject = EmailVO.create(email);
 
     const existingUser =
@@ -17,7 +22,9 @@ export class CreateNewUserUsecase {
       throw new EmailAlreadyExistsException(emailValueObject.value);
     }
 
-    const user = UserEntity.createUser(emailValueObject);
+    const usernameValueObject = UsernameVO.create(username);
+
+    const user = UserEntity.createUser(emailValueObject, usernameValueObject);
 
     // save user
 

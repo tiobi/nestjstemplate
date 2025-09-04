@@ -7,8 +7,8 @@ import {
   // UseGuards,
   UsePipes,
 } from '@nestjs/common';
-import { CreateUserRequestDto } from '../dto/create-user.request.dto';
 import { CreateNewUserUsecase } from '../../application/usecases/create-new-user.usecase';
+import { CreateUserRequestDto } from '../dto/create-user.request.dto';
 import { UserResponseDto } from '../dto/user.response.dto';
 import { UserControllerMapper } from './mappers/user.controller.mapper';
 // import { AdminRoleGuard } from 'src/common/guards/admin-role.guard';
@@ -29,6 +29,7 @@ export class UserController {
   ): Promise<UserResponseDto> {
     const user = await this.createNewUserUsecase.execute(
       createUserRequestDto.email,
+      createUserRequestDto.username ?? null,
     );
 
     return UserControllerMapper.toResponseDto(user);

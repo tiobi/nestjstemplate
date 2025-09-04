@@ -3,10 +3,12 @@ import { TimestampVO } from '../../../common/domain/value_objects/timestamp.vo';
 import { UlidVO } from '../../../common/domain/value_objects/ulid.vo';
 import { UserRole } from '../enums/user-role.enum';
 import { EmailVO } from '../value_objects/email.vo';
+import { UsernameVO } from '../value_objects/username.vo';
 
 export class UserEntity extends BaseEntity {
   private readonly _email: EmailVO;
   private readonly _role: UserRole;
+  private readonly _username: UsernameVO;
 
   private constructor(
     id: UlidVO,
@@ -15,18 +17,28 @@ export class UserEntity extends BaseEntity {
     deletedAt: TimestampVO | null = null,
     email: EmailVO,
     role: UserRole,
+    username: UsernameVO,
   ) {
     super(id, createdAt, updatedAt, deletedAt);
     this._email = email;
     this._role = role;
+    this._username = username;
   }
 
   /**
    * Factory method to create a new user
    */
-  public static createUser(email: EmailVO): UserEntity {
+  public static createUser(email: EmailVO, username: UsernameVO): UserEntity {
     const now = new TimestampVO();
-    return new UserEntity(new UlidVO(), now, now, null, email, UserRole.USER);
+    return new UserEntity(
+      new UlidVO(),
+      now,
+      now,
+      null,
+      email,
+      UserRole.USER,
+      username,
+    );
   }
 
   /**
@@ -39,8 +51,17 @@ export class UserEntity extends BaseEntity {
     deletedAt: TimestampVO | null = null,
     email: EmailVO,
     role: UserRole,
+    username: UsernameVO,
   ): UserEntity {
-    return new UserEntity(id, createdAt, updatedAt, deletedAt, email, role);
+    return new UserEntity(
+      id,
+      createdAt,
+      updatedAt,
+      deletedAt,
+      email,
+      role,
+      username,
+    );
   }
 
   public getEmail(): EmailVO {
@@ -49,6 +70,10 @@ export class UserEntity extends BaseEntity {
 
   public getRole(): UserRole {
     return this._role;
+  }
+
+  public getUsername(): UsernameVO {
+    return this._username;
   }
 
   protected override createCopyWithTimestamp(
@@ -62,6 +87,7 @@ export class UserEntity extends BaseEntity {
       deletedAt, // Use the new deleted time
       this._email,
       this._role,
+      this._username,
     );
   }
 }

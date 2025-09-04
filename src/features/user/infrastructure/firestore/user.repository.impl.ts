@@ -1,7 +1,8 @@
+import { Injectable } from '@nestjs/common';
 import { UserEntity } from '../../domain/entities/user.entity';
 import { UserRepository } from '../../domain/repositories/user.repository.interface';
-import { Injectable } from '@nestjs/common';
 import { EmailVO } from '../../domain/value_objects/email.vo';
+import { UsernameVO } from '../../domain/value_objects/username.vo';
 
 @Injectable()
 export class UserRepositoryImpl extends UserRepository {
@@ -24,7 +25,7 @@ export class UserRepositoryImpl extends UserRepository {
     ];
 
     if (emailList.includes(email.value)) {
-      return UserEntity.createUser(email);
+      return UserEntity.createUser(email, UsernameVO.create('test'));
     }
 
     return null;

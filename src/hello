@@ -1,19 +1,19 @@
 ┌─────────────────────────────────────────┐
-│           INTERFACE LAYER               │ ← NestJS Components belong here
-│  Controllers, DTOs, Guards, Pipes,     │
-│  Interceptors, Filters, Mappers        │
+│           INTERFACE LAYER                   │ ← NestJS Components belong here
+│  Controllers, DTOs, Guards, Pipes,          │
+│  Interceptors, Filters, Mappers             │
 ├─────────────────────────────────────────┤
-│         APPLICATION LAYER               │
-│  Use Cases, Services, Application      │
-│  Exceptions                            │
+│         APPLICATION LAYER                   │
+│  Use Cases, Services, Application           │
+│  Exceptions                                 │
 ├─────────────────────────────────────────┤
-│           DOMAIN LAYER                  │
-│  Entities, Value Objects, Repository   │
-│  Interfaces, Domain Exceptions         │
+│           DOMAIN LAYER                      │
+│  Entities, Value Objects, Repository        │
+│  Interfaces, Domain Exceptions              │
 ├─────────────────────────────────────────┤
-│        INFRASTRUCTURE LAYER             │
-│  Repository Implementations, External  │
-│  Services, Database, APIs, etc.        │
+│        INFRASTRUCTURE LAYER                 │
+│  Repository Implementations, External       │
+│  Services, Database, APIs, etc.             │
 └─────────────────────────────────────────┘
 
 1. GUARDS (Authentication/Authorization)
