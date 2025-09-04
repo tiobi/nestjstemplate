@@ -68,7 +68,11 @@ export class CustomLoggerInterceptor implements NestInterceptor {
             name: error.name,
             duration: `${duration}ms`,
             error: error.message,
-            stack: error.stack?.split('\n').slice(0, 5).join(' | '),
+            stack: error.stack
+              ?.split('\n')
+              .slice(1, 4)
+              .map((line) => line.trim().replace(/^at\s+/, ''))
+              .join(' | '),
             timestamp: new Date().toISOString(),
           });
         },

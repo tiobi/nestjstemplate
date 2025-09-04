@@ -1,12 +1,12 @@
 import {
+  CallHandler,
+  ExecutionContext,
   Injectable,
   NestInterceptor,
-  ExecutionContext,
-  CallHandler,
 } from '@nestjs/common';
+import { Request } from 'express';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Request } from 'express';
 
 @Injectable()
 export class ResponseTransformInterceptor implements NestInterceptor {
@@ -18,7 +18,7 @@ export class ResponseTransformInterceptor implements NestInterceptor {
           meta: {
             timestamp: new Date().toISOString(),
             path: context.switchToHttp().getRequest<Request>().url,
-            version: '1.0',
+            version: process.env.VERSION,
           },
         };
       }),
