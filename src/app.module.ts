@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
+import { HealthModule } from './features/health/health.module';
 import { UserModule } from './features/user/core/user.module';
-import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [UserModule, HealthModule],
