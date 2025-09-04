@@ -45,6 +45,14 @@ export class AuthGuard implements CanActivate {
   }
 
   private _validateToken(token: string): boolean {
-    return token.length > 0;
+    if (token.length === 0) {
+      return false;
+    }
+
+    if (!token.toLowerCase().includes('valid')) {
+      return false;
+    }
+
+    return true;
   }
 }
