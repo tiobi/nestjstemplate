@@ -7,6 +7,7 @@ import {
   HttpStatus,
   Param,
   Post,
+  Put,
   Query,
   UsePipes,
 } from '@nestjs/common';
@@ -17,17 +18,20 @@ import { GetUserByIdUsecase } from '../../application/usecases/get-user-by-id.us
 import { GetUsersByDateRangeUsecase } from '../../application/usecases/get-users-by-date-range.usecase';
 import { GetUsersUsecase } from '../../application/usecases/get-users.usecase';
 import { SoftDeleteUserUsecase } from '../../application/usecases/soft-delete-user.usecase';
+import { UpdateUserUsecase } from '../../application/usecases/update-user.usecase';
 import { CreateUserRequestDto } from '../dto/create-user.request.dto';
 import { DeleteUserResponseDto } from '../dto/delete-user.response.dto';
 import { GetUsersByDateRangeQueryDto } from '../dto/get-users-by-date-range.query.dto';
 import { GetUsersQueryDto } from '../dto/get-users.query.dto';
 import { PaginatedUsersResponseDto } from '../dto/paginated-users.response.dto';
+import { UpdateUserRequestDto } from '../dto/update-user.request.dto';
 import { UserResponseDto } from '../dto/user.response.dto';
 import { UserControllerCreateUserSchemas } from '../schemas/user-controller.create-user.schemas';
 import { UserControllerDeleteUserSchemas } from '../schemas/user-controller.delete-user.schemas';
 import { UserControllerGetUserSchemas } from '../schemas/user-controller.get-user.schemas';
 import { UserControllerGetUsersByDateRangeSchemas } from '../schemas/user-controller.get-users-by-date-range.schemas';
 import { UserControllerGetUsersSchemas } from '../schemas/user-controller.get-users.schemas';
+import { UserControllerUpdateUserSchemas } from '../schemas/user-controller.update-user.schemas';
 import { UserControllerMapper } from './mappers/user.controller.mapper';
 
 @ApiTags('Users')
@@ -39,6 +43,7 @@ export class UserController {
     private readonly getUsersUsecase: GetUsersUsecase,
     private readonly getUsersByDateRangeUsecase: GetUsersByDateRangeUsecase,
     private readonly softDeleteUserUsecase: SoftDeleteUserUsecase,
+    private readonly updateUserUsecase: UpdateUserUsecase,
   ) {}
 
   @Get()
@@ -89,13 +94,26 @@ export class UserController {
     return UserControllerMapper.toResponseDto(user);
   }
 
+  @Put(':id')
+  @HttpCode(HttpStatus.OK)
+  @UsePipes(ReservedUsernamePipe)
+  @UserControllerUpdateUserSchemas.updateUserDecorators()
+  async updateUser(
+    @Param('id') id: string,
+    @Body() updateUserRequestDto: UpdateUserRequestDto,
+  ): Promise<UserResponseDto> {
+    const user = await this.updateUserUsecase.execute(
+      id,
+      updateUserRequestDto.username,
+    );
+    return UserControllerMapper.toResponseDto(user);
+  }
+
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
   @UserControllerDeleteUserSchemas.deleteUserDecorators()
   async deleteUser(@Param('id') id: string): Promise<DeleteUserResponseDto> {
     await this.softDeleteUserUsecase.execute(id);
-    return UserControllerMapper.toDeleteResponseDto(
-      id,
-    ) as DeleteUserResponseDto;
+    return UserControllerMapper.toDeleteResponseDto(id);
   }
 }

@@ -75,7 +75,8 @@ Content-Type: application/json
   },
   "meta": {
     "timestamp": "2025-01-05T01:48:10.478Z",
-    "path": "/api/users"
+    "path": "/api/users",
+    "version": "1.0"
   }
 }
 \`\`\``,

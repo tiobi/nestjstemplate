@@ -1,4 +1,3 @@
-import { NotFoundException } from '@nestjs/common';
 import { TimestampVO } from 'src/common/value_objects/timestamp.vo';
 import { UlidVO } from 'src/common/value_objects/ulid.vo';
 import { UserEntity } from '../../../domain/entities/user.entity';
@@ -6,6 +5,7 @@ import { UserRole } from '../../../domain/enums/user-role.enum';
 import { UserRepository } from '../../../domain/repositories/user.repository.interface';
 import { EmailVO } from '../../../domain/value_objects/email.vo';
 import { UsernameVO } from '../../../domain/value_objects/username.vo';
+import { UserNotFoundException } from '../../exceptions/user-not-found.exception';
 import { SoftDeleteUserUsecase } from '../soft-delete-user.usecase';
 
 describe('SoftDeleteUserUsecase', () => {
@@ -55,20 +55,22 @@ describe('SoftDeleteUserUsecase', () => {
       );
     });
 
-    it('should throw NotFoundException when user does not exist', async () => {
+    it('should throw UserNotFoundException when user does not exist', async () => {
       // Arrange
       const userId = '01K4BTM6CK2Q6V8HP7XA9M63DH';
       mockUserRepository.findById.mockResolvedValue(null);
 
       // Act & Assert
-      await expect(usecase.execute(userId)).rejects.toThrow(NotFoundException);
+      await expect(usecase.execute(userId)).rejects.toThrow(
+        UserNotFoundException,
+      );
       expect(mockUserRepository.findById).toHaveBeenCalledWith(
         UlidVO.fromString(userId),
       );
       expect(mockUserRepository.update).not.toHaveBeenCalled();
     });
 
-    it('should throw NotFoundException when user is already deleted', async () => {
+    it('should throw UserNotFoundException when user is already deleted', async () => {
       // Arrange
       const userId = '01K4BTM6CK2Q6V8HP7XA9M63DH';
       const deletedUser = UserEntity.fromData(
@@ -84,7 +86,9 @@ describe('SoftDeleteUserUsecase', () => {
       mockUserRepository.findById.mockResolvedValue(deletedUser);
 
       // Act & Assert
-      await expect(usecase.execute(userId)).rejects.toThrow(NotFoundException);
+      await expect(usecase.execute(userId)).rejects.toThrow(
+        UserNotFoundException,
+      );
       expect(mockUserRepository.findById).toHaveBeenCalledWith(
         UlidVO.fromString(userId),
       );

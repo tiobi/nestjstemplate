@@ -150,7 +150,8 @@ Always use the interceptor structure:
   },
   "meta": {
     "timestamp": "2025-01-05T01:48:10.478Z",
-    "path": "/api/endpoint?param1=value1"
+    "path": "/api/endpoint?param1=value1",
+    "version": "1.0.0"
   }
 }
 ```

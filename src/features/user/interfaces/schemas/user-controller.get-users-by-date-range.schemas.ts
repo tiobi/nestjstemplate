@@ -48,7 +48,8 @@ GET /api/users/by-date-range?startDate=2024-01-01T00:00:00.000Z&endDate=2024-12-
   },
   "meta": {
     "timestamp": "2025-01-05T01:48:10.478Z",
-    "path": "/api/users/by-date-range?startDate=2024-01-01T00%3A00%3A00.000Z&endDate=2024-12-31T23%3A59%3A59.999Z&page=1&limit=10"
+    "path": "/api/users/by-date-range?startDate=2024-01-01T00%3A00%3A00.000Z&endDate=2024-12-31T23%3A59%3A59.999Z&page=1&limit=10",
+    "version": "1.0"
   }
 }
 \`\`\``,

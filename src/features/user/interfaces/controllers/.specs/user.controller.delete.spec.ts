@@ -5,6 +5,7 @@ import { GetUserByIdUsecase } from '../../../application/usecases/get-user-by-id
 import { GetUsersByDateRangeUsecase } from '../../../application/usecases/get-users-by-date-range.usecase';
 import { GetUsersUsecase } from '../../../application/usecases/get-users.usecase';
 import { SoftDeleteUserUsecase } from '../../../application/usecases/soft-delete-user.usecase';
+import { UpdateUserUsecase } from '../../../application/usecases/update-user.usecase';
 import { UserController } from '../user.controller';
 
 describe('UserController - deleteUser', () => {
@@ -14,7 +15,7 @@ describe('UserController - deleteUser', () => {
   beforeEach(async () => {
     mockSoftDeleteUserUsecase = {
       execute: jest.fn(),
-    } as jest.Mocked<SoftDeleteUserUsecase>;
+    } as unknown as jest.Mocked<SoftDeleteUserUsecase>;
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UserController],
@@ -38,6 +39,10 @@ describe('UserController - deleteUser', () => {
         },
         {
           provide: GetUsersByDateRangeUsecase,
+          useValue: { execute: jest.fn() },
+        },
+        {
+          provide: UpdateUserUsecase,
           useValue: { execute: jest.fn() },
         },
       ],

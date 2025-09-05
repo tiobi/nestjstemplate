@@ -4,6 +4,7 @@ import { GetUserByIdUsecase } from '../application/usecases/get-user-by-id.useca
 import { GetUsersByDateRangeUsecase } from '../application/usecases/get-users-by-date-range.usecase';
 import { GetUsersUsecase } from '../application/usecases/get-users.usecase';
 import { SoftDeleteUserUsecase } from '../application/usecases/soft-delete-user.usecase';
+import { UpdateUserUsecase } from '../application/usecases/update-user.usecase';
 import { UserRepository } from '../domain/repositories/user.repository.interface';
 import { UserRepositoryImpl } from '../infrastructure/firestore/user.repository.impl';
 import { UserController } from '../interfaces/controllers/user.controller';
@@ -17,6 +18,7 @@ import { UserController } from '../interfaces/controllers/user.controller';
     GetUsersUsecase,
     GetUsersByDateRangeUsecase,
     SoftDeleteUserUsecase,
+    UpdateUserUsecase,
   ],
   exports: [UserRepository],
 })

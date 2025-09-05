@@ -58,7 +58,8 @@ GET /api/users?page=1&limit=10
   },
   "meta": {
     "timestamp": "2025-01-05T01:48:10.478Z",
-    "path": "/api/users?page=1&limit=10"
+    "path": "/api/users?page=1&limit=10",
+    "version": "1.0"
   }
 }
 \`\`\``,

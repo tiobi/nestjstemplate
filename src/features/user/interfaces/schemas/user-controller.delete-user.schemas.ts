@@ -44,7 +44,8 @@ DELETE /api/users/01HZ123456789ABCDEFGHIJKLMN
   },
   "meta": {
     "timestamp": "2025-01-05T01:48:10.478Z",
-    "path": "/api/users/01HZ123456789ABCDEFGHIJKLMN"
+    "path": "/api/users/01HZ123456789ABCDEFGHIJKLMN",
+    "version": "1.0"
   }
 }
 \`\`\``,
