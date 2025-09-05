@@ -19,7 +19,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       const meta = {
         timestamp: new Date().toISOString(),
         path: request.url,
-        version: '1.0',
+        version: process.env.VERSION || '1.0.0',
       };
 
       return response
@@ -40,7 +40,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       meta: {
         timestamp: new Date().toISOString(),
         path: request.url,
-        version: '1.0',
+        version: process.env.VERSION || '1.0.0',
       },
     });
   }

@@ -18,7 +18,7 @@ export class ResponseTransformInterceptor implements NestInterceptor {
           meta: {
             timestamp: new Date().toISOString(),
             path: context.switchToHttp().getRequest<Request>().url,
-            version: process.env.VERSION,
+            version: process.env.VERSION || '1.0.0',
           },
         };
       }),

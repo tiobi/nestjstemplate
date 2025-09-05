@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { Observable, tap } from 'rxjs';
+import { BaseException } from '../exceptions/base.exception';
 
 export class CustomLoggerInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
@@ -57,7 +58,11 @@ export class CustomLoggerInterceptor implements NestInterceptor {
         error: (error: HttpException | Error) => {
           const duration = Date.now() - startTime;
           const statusCode =
-            error instanceof HttpException ? error.getStatus() : 500;
+            error instanceof HttpException
+              ? error.getStatus()
+              : error instanceof BaseException
+                ? error.statusCode
+                : 500;
 
           // Log error response
           Logger.error('Request Error');

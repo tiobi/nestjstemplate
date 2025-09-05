@@ -93,7 +93,7 @@ export abstract class BaseException extends Error {
       },
       meta: meta || {
         timestamp: this._timestamp.toJsonFormat(),
-        version: '1.0',
+        version: process.env.VERSION || '1.0.0',
       },
     };
   }
