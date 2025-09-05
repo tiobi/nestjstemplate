@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { UserValidationService } from '../application/services/user-validation.service';
 import { CreateNewUserUsecase } from '../application/usecases/create-new-user.usecase';
 import { GetUserByIdUsecase } from '../application/usecases/get-user-by-id.usecase';
 import { GetUsersByDateRangeUsecase } from '../application/usecases/get-users-by-date-range.usecase';
@@ -13,6 +14,7 @@ import { UserController } from '../interfaces/controllers/user.controller';
   controllers: [UserController],
   providers: [
     { provide: UserRepository, useClass: UserRepositoryImpl },
+    UserValidationService,
     CreateNewUserUsecase,
     GetUserByIdUsecase,
     GetUsersUsecase,

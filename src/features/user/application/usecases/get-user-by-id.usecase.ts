@@ -1,29 +1,23 @@
 import { Injectable } from '@nestjs/common';
-import { UlidVO } from 'src/common/value_objects/ulid.vo';
 import { UserEntity } from '../../domain/entities/user.entity';
 import { UserRepository } from '../../domain/repositories/user.repository.interface';
-import { UserNotFoundException } from '../exceptions/user-not-found.exception';
+import { UserValidationService } from '../services/user-validation.service';
 
 @Injectable()
 export class GetUserByIdUsecase {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(
+    private readonly userRepository: UserRepository,
+    private readonly userValidationService: UserValidationService,
+  ) {}
 
   async execute(id: string): Promise<UserEntity> {
-    // Validate and create ULID value object
-    let ulidVO: UlidVO;
-    try {
-      ulidVO = UlidVO.fromString(id);
-    } catch {
-      throw new UserNotFoundException(id);
-    }
+    // Validate ID and ensure user exists
+    const ulidVO =
+      await this.userValidationService.validateIdAndEnsureUserExists(id);
 
     // Find user by ID
     const user = await this.userRepository.findById(ulidVO);
 
-    if (!user) {
-      throw new UserNotFoundException(id);
-    }
-
-    return user;
+    return user!; // We know user exists due to validation
   }
 }

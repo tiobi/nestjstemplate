@@ -1,26 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { UlidVO } from 'src/common/value_objects/ulid.vo';
 import { UserRepository } from '../../domain/repositories/user.repository.interface';
-import { UserNotFoundException } from '../exceptions/user-not-found.exception';
+import { UserValidationService } from '../services/user-validation.service';
 
 @Injectable()
 export class DeleteUserUsecase {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(
+    private readonly userRepository: UserRepository,
+    private readonly userValidationService: UserValidationService,
+  ) {}
 
   async execute(id: string): Promise<void> {
-    // Validate and create ULID value object
-    let ulidVO: UlidVO;
-    try {
-      ulidVO = UlidVO.fromString(id);
-    } catch {
-      throw new UserNotFoundException(id);
-    }
-
-    // Check if user exists before attempting to delete
-    const existingUser = await this.userRepository.findById(ulidVO);
-    if (!existingUser) {
-      throw new UserNotFoundException(id);
-    }
+    // Validate ID and ensure user exists
+    const ulidVO =
+      await this.userValidationService.validateIdAndEnsureUserExists(id);
 
     // Perform soft delete
     await this.userRepository.delete(ulidVO);

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { TimestampVO } from 'src/common/value_objects/timestamp.vo';
 import { UserEntity } from '../../domain/entities/user.entity';
 import { UserRepository } from '../../domain/repositories/user.repository.interface';
+import { UserValidationService } from '../services/user-validation.service';
 
 export interface GetUsersByDateRangeResult {
   users: UserEntity[];
@@ -13,7 +14,10 @@ export interface GetUsersByDateRangeResult {
 
 @Injectable()
 export class GetUsersByDateRangeUsecase {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(
+    private readonly userRepository: UserRepository,
+    private readonly userValidationService: UserValidationService,
+  ) {}
 
   async execute(
     startDate?: string,
@@ -21,9 +25,9 @@ export class GetUsersByDateRangeUsecase {
     page: number = 1,
     limit: number = 10,
   ): Promise<GetUsersByDateRangeResult> {
-    // Ensure valid pagination values
-    const validPage = Math.max(1, page);
-    const validLimit = Math.min(Math.max(1, limit), 100);
+    // Validate pagination parameters
+    const { validPage, validLimit } =
+      this.userValidationService.validatePagination(page, limit);
 
     // Parse dates if provided
     const startTimestamp = startDate ? TimestampVO.fromString(startDate) : null;
