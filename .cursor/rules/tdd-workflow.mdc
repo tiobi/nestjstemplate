@@ -1,0 +1,196 @@
+---
+description: TDD workflow and testing patterns for NestJS development
+globs: ['**/*.spec.ts', '**/*.test.ts', '**/test/**/*.ts']
+alwaysApply: false
+---
+
+# TDD Workflow Rules
+
+## Fast & Simple Testing Strategy
+
+### Test Priority Order (Write in this sequence)
+
+#### 1. **Edge Cases First** - Critical Path Tests
+
+- Test boundary conditions and error states
+- Test invalid inputs and edge values
+- Test null/undefined handling
+- Test empty collections and extreme values
+- **Why**: These catch the most bugs and prevent crashes
+
+#### 2. **Happy Path** - Core Functionality
+
+- Test the main success scenario
+- Test with valid, typical inputs
+- Test expected behavior and outputs
+- **Why**: Ensures basic functionality works
+
+#### 3. **Integration Points** - External Dependencies
+
+- Test interactions with repositories, services, APIs
+- Test data transformation and mapping
+- Test error handling from external calls
+- **Why**: Validates system boundaries work correctly
+
+#### 4. **Performance & Efficiency** - Optimization Tests
+
+- Test with large datasets
+- Test performance under load
+- Test memory usage and cleanup
+- **Why**: Ensures scalability and efficiency
+
+## Red-Green-Refactor Cycle
+
+### 1. Red Phase - Write Failing Test
+
+- Start with edge cases (most critical)
+- Write specific, focused tests
+- Use descriptive test names: `should throw error when email is null`
+- Test should fail initially (Red)
+
+### 2. Green Phase - Make Test Pass
+
+- Write minimal code to pass the test
+- Don't optimize yet, just make it work
+- Focus on correctness over performance
+- Move to next test quickly
+
+### 3. Refactor Phase - Improve Code
+
+- Refactor while keeping all tests green
+- Apply Clean Architecture principles
+- Optimize performance and readability
+- Ensure domain layer independence
+
+## Test Structure - Keep It Simple
+
+### Unit Tests (Primary Focus)
+
+```typescript
+describe('EmailVO', () => {
+  // 1. Edge cases first
+  it('should throw error when email is null', () => {
+    expect(() => EmailVO.create(null)).toThrow();
+  });
+
+  it('should throw error when email is empty string', () => {
+    expect(() => EmailVO.create('')).toThrow();
+  });
+
+  it('should throw error when email has no @ symbol', () => {
+    expect(() => EmailVO.create('invalid-email')).toThrow();
+  });
+
+  // 2. Happy path
+  it('should create valid email', () => {
+    const email = EmailVO.create('test@example.com');
+    expect(email.value).toBe('test@example.com');
+  });
+
+  // 3. Integration points
+  it('should handle email normalization', () => {
+    const email = EmailVO.create('TEST@EXAMPLE.COM');
+    expect(email.value).toBe('test@example.com');
+  });
+});
+```
+
+### Integration Tests (When Needed)
+
+- Test controller endpoints with real data
+- Test service interactions
+- Test database operations
+- Keep these minimal and focused
+
+### E2E Tests (Critical Paths Only)
+
+- Test complete user workflows
+- Test authentication flows
+- Test error handling end-to-end
+- Don't over-test with E2E
+
+## Testing Best Practices
+
+### Write Tests That Matter
+
+- **Edge cases first** - Catch the most bugs
+- **One test per behavior** - Keep tests focused
+- **Descriptive names** - `should throw error when...`
+- **Fast execution** - Mock external dependencies
+- **Simple setup** - Minimal test data
+
+### Avoid Over-Testing
+
+- Don't test framework code
+- Don't test simple getters/setters
+- Don't test third-party libraries
+- Focus on business logic and edge cases
+
+### Test Naming Convention
+
+```typescript
+// Good: Specific and descriptive
+it('should throw InvalidEmailException when email is null', () => {});
+it('should return user when valid ID is provided', () => {});
+it('should throw UserNotFoundException when user does not exist', () => {});
+
+// Bad: Vague and unclear
+it('should work', () => {});
+it('should handle email', () => {});
+it('should be valid', () => {});
+```
+
+## Quick Test Checklist
+
+### Before Writing Code
+
+1. ✅ What are the edge cases?
+2. ✅ What should happen with invalid input?
+3. ✅ What are the boundary conditions?
+4. ✅ What external dependencies are involved?
+
+### Test Quality
+
+1. ✅ Does it test one specific behavior?
+2. ✅ Is the test name descriptive?
+3. ✅ Does it run fast (< 100ms)?
+4. ✅ Does it catch real bugs?
+5. ✅ Is it easy to understand?
+
+## Mock Patterns - Keep It Simple
+
+```typescript
+// Simple mock - only what you need
+const mockUserRepository = {
+  save: jest.fn(),
+  findById: jest.fn(),
+  findByEmail: jest.fn(),
+};
+
+// Mock with return values
+mockUserRepository.findById.mockResolvedValue(mockUser);
+mockUserRepository.save.mockResolvedValue(undefined);
+
+// Verify calls
+expect(mockUserRepository.save).toHaveBeenCalledWith(expectedUser);
+```
+
+## Test Execution Strategy
+
+### Fast Feedback Loop
+
+1. **Write edge case test** → Red
+2. **Make it pass** → Green
+3. **Write happy path test** → Red
+4. **Make it pass** → Green
+5. **Refactor** → All tests still green
+6. **Repeat** for next feature
+
+### Focus Areas
+
+- **Domain logic** - Value objects, entities, business rules
+- **Error handling** - Invalid inputs, edge cases
+- **Integration points** - Repository calls, service interactions
+- **Critical paths** - Authentication, data validation
+
+Remember: **Edge cases first, happy path second, integration third, performance last. Keep it simple and fast!**

@@ -45,8 +45,40 @@ export class UserControllerCreateUserSchemas {
     ) => {
       ApiOperation({
         summary: 'Create a new user',
-        description:
-          'Creates a new user account with email and optional username. Username must not contain reserved words.',
+        description: `Create a new user account.
+
+**Request Format:**
+\`\`\`http
+POST /api/users
+Content-Type: application/json
+
+{
+  "email": "john.doe@example.com",
+  "username": "johndoe"
+}
+\`\`\`
+
+**Request Body:**
+- \`email\` - User email (string, required)
+- \`username\` - Username (string, optional)
+
+**Response Format:**
+\`\`\`json
+{
+  "data": {
+    "id": "01HZ123456789ABCDEFGHIJKLMN",
+    "email": "john.doe@example.com",
+    "username": "johndoe",
+    "createdAt": "2024-03-15T10:30:00.000Z",
+    "updatedAt": "2024-03-15T10:30:00.000Z",
+    "deletedAt": null
+  },
+  "meta": {
+    "timestamp": "2025-01-05T01:48:10.478Z",
+    "path": "/api/users"
+  }
+}
+\`\`\``,
       })(target, propertyKey, descriptor);
 
       ApiBody(UserControllerCreateUserSchemas.createUserRequestSchema)(

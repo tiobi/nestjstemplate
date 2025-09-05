@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { TimestampVO } from 'src/common/value_objects/timestamp.vo';
 import { UlidVO } from 'src/common/value_objects/ulid.vo';
 import { UserNotFoundException } from '../../application/exceptions/user-not-found.exception';
 import { UserEntity } from '../../domain/entities/user.entity';
@@ -78,6 +79,67 @@ export class UserRepositoryImpl extends UserRepository {
     const endIndex = startIndex + limit;
 
     const users = activeUsers.slice(startIndex, endIndex);
+
+    return {
+      users,
+      total,
+      page,
+      limit,
+      totalPages,
+    };
+  }
+
+  async findByDateRange(
+    startDate: TimestampVO | null,
+    endDate: TimestampVO | null,
+    page: number,
+    limit: number,
+  ): Promise<{
+    users: UserEntity[];
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+  }> {
+    await new Promise((resolve) => setTimeout(resolve, 10));
+
+    // Filter out soft-deleted users first
+    const activeUsers = Array.from(this.mockUsers.values()).filter(
+      (user) => !user.deletedAt(),
+    );
+
+    // Filter by date range
+    const filteredUsers = activeUsers.filter((user) => {
+      const userCreatedAt = user.createdAt();
+
+      // If no start date provided, include all users before end date
+      if (startDate === null && endDate !== null) {
+        return userCreatedAt.value <= endDate.value;
+      }
+
+      // If no end date provided, include all users after start date
+      if (startDate !== null && endDate === null) {
+        return userCreatedAt.value >= startDate.value;
+      }
+
+      // If both dates provided, include users within range
+      if (startDate !== null && endDate !== null) {
+        return (
+          userCreatedAt.value >= startDate.value &&
+          userCreatedAt.value <= endDate.value
+        );
+      }
+
+      // If no dates provided, return all users (same as findAll)
+      return true;
+    });
+
+    const total = filteredUsers.length;
+    const totalPages = Math.ceil(total / limit);
+    const startIndex = (page - 1) * limit;
+    const endIndex = startIndex + limit;
+
+    const users = filteredUsers.slice(startIndex, endIndex);
 
     return {
       users,

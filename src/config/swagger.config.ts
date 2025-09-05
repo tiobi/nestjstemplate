@@ -229,6 +229,55 @@ export function setupSwagger(app: INestApplication): void {
         border-radius: 4px; 
         border: 1px solid #e2e8f0;
       }
+      
+      /* Code block styling - make text black */
+      .swagger-ui .opblock-description-wrapper pre,
+      .swagger-ui .opblock-description-wrapper code,
+      .swagger-ui .opblock-description-wrapper pre code,
+      .swagger-ui .opblock-description-wrapper .highlight-code,
+      .swagger-ui .opblock-description-wrapper .highlight-code code,
+      .swagger-ui .opblock-description-wrapper .highlight-code pre,
+      .swagger-ui .opblock-description-wrapper .highlight-code pre code,
+      .swagger-ui .opblock-description-wrapper .microlight,
+      .swagger-ui .opblock-description-wrapper .microlight code,
+      .swagger-ui .opblock-description-wrapper .microlight pre,
+      .swagger-ui .opblock-description-wrapper .microlight pre code,
+      .swagger-ui .opblock-description-wrapper .hljs,
+      .swagger-ui .opblock-description-wrapper .hljs code,
+      .swagger-ui .opblock-description-wrapper .hljs pre,
+      .swagger-ui .opblock-description-wrapper .hljs pre code {
+        color: #000000 !important;
+        background-color: #f8f9fa !important;
+        border: 1px solid #e9ecef !important;
+        border-radius: 4px !important;
+        padding: 12px !important;
+        font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'Courier New', monospace !important;
+        font-size: 13px !important;
+        line-height: 1.4 !important;
+        overflow-x: auto !important;
+      }
+      
+      /* Ensure code blocks in descriptions have black text */
+      .swagger-ui .opblock-description-wrapper p code,
+      .swagger-ui .opblock-description-wrapper li code,
+      .swagger-ui .opblock-description-wrapper td code,
+      .swagger-ui .opblock-description-wrapper th code {
+        color: #000000 !important;
+        background-color: #f8f9fa !important;
+        padding: 2px 6px !important;
+        border-radius: 3px !important;
+        font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'Courier New', monospace !important;
+        font-size: 12px !important;
+      }
+      
+      /* Markdown code block styling */
+      .swagger-ui .opblock-description-wrapper pre[class*="language-"],
+      .swagger-ui .opblock-description-wrapper code[class*="language-"],
+      .swagger-ui .opblock-description-wrapper pre[class*="lang-"],
+      .swagger-ui .opblock-description-wrapper code[class*="lang-"] {
+        color: #000000 !important;
+        background-color: #f8f9fa !important;
+      }
     `,
   });
 }

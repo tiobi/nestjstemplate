@@ -1,0 +1,319 @@
+---
+description: NestJS TDD Template - Complete project rules for Clean Architecture and TDD development
+globs: ['**/*.ts', '**/*.js', '**/*.json']
+alwaysApply: true
+---
+
+# NestJS TDD Template - Project Rules
+
+## Project Overview
+
+This is a NestJS template project that serves as a foundation for building scalable server-side applications. The project implements a clean architecture pattern with domain-driven design principles.
+
+### Key Features
+
+- User management system with role-based access
+- RESTful API with comprehensive Swagger documentation
+- Health check endpoints for monitoring
+- JWT-based authentication system
+- Global exception handling and request/response transformation
+- Comprehensive logging and validation
+
+### Architecture Philosophy
+
+The project follows Domain-Driven Design (DDD) and Clean Architecture principles, organizing code into distinct layers:
+
+- **Domain Layer**: Core business logic, entities, and value objects
+- **Application Layer**: Use cases and application services
+- **Infrastructure Layer**: External concerns like databases and third-party services
+- **Interface Layer**: Controllers, DTOs, and API schemas
+
+This separation ensures maintainability, testability, and independence from external frameworks.
+
+### Development Methodology
+
+This project follows Test-Driven Development (TDD) methodology with Red-Green-Refactor cycles.
+
+## Project Structure & Organization
+
+### Root Level Structure
+
+```
+├── src/                    # Source code
+├── test/                   # E2E tests
+├── dist/                   # Compiled output
+├── logs/                   # Application logs
+├── scripts/                # Build and utility scripts
+└── node_modules/           # Dependencies
+```
+
+### Feature-Based Architecture
+
+Each feature follows Clean Architecture with these layers:
+
+```
+src/features/{feature-name}/
+├── core/                   # Module definition and DI setup
+├── domain/                 # Business logic layer
+│   ├── entities/          # Domain entities with business rules
+│   ├── value_objects/     # Immutable value objects
+│   ├── enums/             # Domain enums
+│   ├── repositories/      # Repository interfaces
+│   └── services/          # Domain services
+├── application/           # Use cases layer
+│   ├── usecases/         # Application use cases
+│   ├── services/         # Application services
+│   └── exceptions/       # Application-specific exceptions
+├── infrastructure/        # External concerns layer
+│   ├── firestore/        # Database implementations
+│   ├── config/           # Infrastructure configuration
+│   └── mappers/          # Data mapping utilities
+└── interfaces/           # API layer
+    ├── controllers/      # HTTP controllers
+    ├── dto/              # Data Transfer Objects
+    ├── schemas/          # API documentation schemas
+    ├── pipes/            # Custom validation pipes
+    └── validators/       # Custom validators
+```
+
+### Common Shared Code (`src/common/`)
+
+```
+src/common/
+├── entities/             # Base entity classes
+├── value_objects/        # Shared value objects (ULID, Timestamp)
+├── exceptions/           # Base exception classes
+├── filters/              # Global exception filters
+├── guards/               # Authentication/authorization guards
+├── interceptors/         # Request/response interceptors
+├── pipes/                # Global validation pipes
+├── services/             # Shared services (logging, etc.)
+└── types/                # TypeScript type definitions
+```
+
+### Configuration (`src/config/`)
+
+- Application configuration files
+- Environment-specific settings
+- Swagger documentation setup
+
+## Technology Stack
+
+### Core Framework & Runtime
+
+- **NestJS 11.x** - Progressive Node.js framework with TypeScript
+- **Node.js** - JavaScript runtime
+- **TypeScript 5.7.x** - Strongly typed JavaScript with ES2023 target
+
+### Key Dependencies
+
+- **class-validator & class-transformer** - DTO validation and transformation
+- **@nestjs/swagger** - API documentation generation
+- **@nestjs/jwt & passport** - Authentication and authorization
+- **@nestjs/terminus** - Health checks
+- **ulid** - Unique identifier generation
+
+### Development Tools
+
+- **ESLint** - Code linting with TypeScript support
+- **Prettier** - Code formatting (single quotes, trailing commas, 80 char width)
+- **Jest** - Testing framework
+- **Nodemon** - Development file watching
+- **PM2** - Production process management
+
+### Build System
+
+- **TypeScript Compiler** - Native tsc with nodenext module resolution
+- **Nest CLI** - Project scaffolding and build tools
+
+### Common Commands
+
+#### Development
+
+```bash
+npm run dev                    # Start with nodemon (recommended)
+npm run start:dev             # Start with nest --watch
+npm run start:debug           # Debug mode with inspect
+```
+
+#### Building & Production
+
+```bash
+npm run build                 # Clean and compile TypeScript
+npm run start:prod            # Run compiled JavaScript
+npm run start:prod:pm2        # Production with PM2
+```
+
+#### Code Quality
+
+```bash
+npm run lint                  # Fix linting issues
+npm run lint:check           # Check without fixing
+npm run format               # Format code with Prettier
+npm run type-check           # TypeScript type checking
+```
+
+#### Testing
+
+```bash
+npm run test                 # Unit tests
+npm run test:watch          # Watch mode
+npm run test:cov            # With coverage
+npm run test:e2e            # End-to-end tests
+```
+
+#### Documentation
+
+```bash
+npm run swagger:generate     # Generate Swagger documentation
+```
+
+### Configuration Notes
+
+- Global API prefix: `/api`
+- Swagger docs available at `/api/docs` (non-production only)
+- Default port: 3000
+- Validation: whitelist enabled, transform enabled, forbid non-whitelisted properties
+
+## Naming Conventions
+
+### Files & Directories
+
+- **kebab-case** for file and directory names
+- **Descriptive suffixes**: `.entity.ts`, `.dto.ts`, `.controller.ts`, `.service.ts`, `.module.ts`
+- **Feature directories**: Use singular nouns (e.g., `user/`, not `users/`)
+
+### Classes & Interfaces
+
+- **PascalCase** for class names with descriptive suffixes
+- **Entities**: `UserEntity`, `OrderEntity`
+- **Value Objects**: `EmailVO`, `TimestampVO`
+- **DTOs**: `CreateUserRequestDto`, `UserResponseDto`
+- **Controllers**: `UserController`
+- **Services/Use Cases**: `CreateNewUserUsecase`
+- **Repositories**: `UserRepository` (interface), `UserRepositoryImpl` (implementation)
+
+### Methods & Variables
+
+- **camelCase** for methods and variables
+- **Private fields**: Prefix with underscore `_email`, `_createdAt`
+- **Factory methods**: Use static methods like `createUser()`, `fromData()`
+
+## Architectural Rules
+
+### Domain Layer
+
+- No dependencies on external frameworks
+- Entities are immutable with factory methods
+- Value objects validate their own invariants
+- Repository interfaces define contracts
+
+### Application Layer
+
+- Contains use cases that orchestrate domain objects
+- Handles application-specific exceptions
+- No direct database or HTTP concerns
+
+### Infrastructure Layer
+
+- Implements repository interfaces
+- Handles external service integrations
+- Contains framework-specific code
+
+### Interface Layer
+
+- Controllers handle HTTP concerns only
+- DTOs for request/response validation
+- Mappers convert between DTOs and domain objects
+- Swagger schemas for API documentation
+
+### Module Organization
+
+- Each feature has a core module that wires dependencies
+- Use dependency injection with interface-based contracts
+- Export repository interfaces, not implementations
+- Import feature modules in `AppModule`
+
+## Code Style & Linting
+
+- Use single quotes for strings
+- Always include trailing commas
+- Maintain 80 character line width
+- Follow TypeScript conventions strictly
+- Run `npm run lint` automatically on file save
+- Auto-fix linting errors when possible
+- Ensure code follows project's ESLint configuration
+
+## TDD Workflow (Red-Green-Refactor)
+
+1. **Red**: Write failing test first
+2. **Green**: Write minimal code to pass the test
+3. **Refactor**: Improve code while keeping tests green
+4. **Repeat**: Continue cycle for each feature
+
+## NestJS Conventions
+
+- Use proper decorators (`@Injectable`, `@Controller`, `@Get`, etc.)
+- Follow dependency injection patterns
+- Use DTOs for request/response validation
+- Implement proper error handling with custom exceptions
+- Use guards, interceptors, and pipes appropriately
+
+## Code Quality Rules
+
+- Write descriptive test names that explain the behavior
+- Keep functions small and focused (single responsibility)
+- Use meaningful variable and function names
+- Add JSDoc comments for public APIs
+- Ensure all public methods have corresponding tests
+- Follow the existing project structure patterns
+
+## Auto-Fix on Save
+
+When TypeScript files are modified:
+
+1. Automatically run `npm run lint` to check for errors
+2. Auto-fix any fixable linting issues
+3. Ensure code follows all style guidelines
+4. Maintain Clean Architecture layer boundaries
+5. Preserve domain layer independence
+
+## Auto-Update Schemas
+
+When code changes are detected in the source directory:
+
+1. Analyze changes in DTOs, entities, and API endpoints
+2. Automatically update relevant schema files in:
+   - `src/common/schemas/` (common schemas)
+   - `src/features/*/interfaces/schemas/` (feature-specific schemas)
+3. Ensure schema files reflect:
+   - New DTO structures and properties
+   - Updated entity relationships
+   - Modified API endpoint contracts
+   - Validation rules and constraints
+4. Maintain consistency between code and documentation
+5. Update Swagger/OpenAPI schemas when applicable
+
+## Testing Requirements
+
+- Write unit tests for all services and utilities
+- Write integration tests for controllers
+- Use proper test descriptions and arrange-act-assert pattern
+- Mock external dependencies appropriately
+- Ensure test coverage for critical business logic
+
+## Error Handling
+
+- Use custom exception classes that extend BaseException
+- Provide meaningful error messages
+- Log errors appropriately using AppLoggerService
+- Return consistent error response format
+
+## DTOs and Validation
+
+- Use class-validator decorators for input validation
+- Create separate DTOs for requests and responses
+- Use class-transformer for data transformation
+- Follow the existing DTO patterns in the project
+
+Remember: Always follow the Red-Green-Refactor cycle, maintain Clean Architecture principles, and ensure domain layer independence.

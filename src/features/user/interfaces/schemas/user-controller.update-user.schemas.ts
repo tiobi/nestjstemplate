@@ -67,8 +67,43 @@ export class UserControllerUpdateUserSchemas {
     ) => {
       ApiOperation({
         summary: 'Update user by ID',
-        description:
-          'Updates a user with new email and/or username. At least one field must be provided.',
+        description: `Update user with new email and/or username.
+
+**Request Format:**
+\`\`\`http
+PUT /api/users/01HZ123456789ABCDEFGHIJKLMN
+Content-Type: application/json
+
+{
+  "email": "newemail@example.com",
+  "username": "newusername"
+}
+\`\`\`
+
+**Path Parameters:**
+- \`id\` - User ID (ULID)
+
+**Request Body:**
+- \`email\` - New email (string, optional)
+- \`username\` - New username (string, optional)
+
+**Response Format:**
+\`\`\`json
+{
+  "data": {
+    "id": "01HZ123456789ABCDEFGHIJKLMN",
+    "email": "newemail@example.com",
+    "username": "newusername",
+    "createdAt": "2024-03-15T10:30:00.000Z",
+    "updatedAt": "2025-01-05T01:48:10.478Z",
+    "deletedAt": null
+  },
+  "meta": {
+    "timestamp": "2025-01-05T01:48:10.478Z",
+    "path": "/api/users/01HZ123456789ABCDEFGHIJKLMN"
+  }
+}
+\`\`\``,
       })(target, propertyKey, descriptor);
 
       ApiParam(CommonApiSchemas.ulidParamSchema)(

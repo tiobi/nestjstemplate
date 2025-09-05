@@ -1,0 +1,208 @@
+---
+description: Schema documentation standard for Swagger/OpenAPI schemas
+globs: ['**/schemas/**/*.ts', '**/*.schemas.ts']
+alwaysApply: true
+---
+
+# Schema Documentation Standard
+
+## Overview
+
+This standard defines how to create concise, developer-friendly Swagger schemas that focus on essential information without verbose explanations.
+
+## Schema Structure Template
+
+```typescript
+description: `Brief endpoint description.
+
+**Request Format:**
+\`\`\`http
+GET /api/endpoint?param1=value1&param2=value2
+Content-Type: application/json
+
+{
+  "body": "data"
+}
+\`\`\`
+
+**Response Format:**
+\`\`\`json
+{
+  "data": { /* actual response structure */ },
+  "meta": { /* interceptor metadata */ }
+}
+\`\`\``;
+```
+
+## Key Principles
+
+### 1. Concise Descriptions
+
+- **Good**: `'Start date (ISO 8601)'`
+- **Bad**: `'Start date for filtering users (inclusive). Users created on or after this date will be included.'`
+
+### 2. Real HTTP Examples
+
+- Show actual request format with realistic parameters
+- Include headers when relevant (Content-Type, Authorization)
+- Use real endpoint URLs and parameter values
+
+### 3. Complete JSON Response
+
+- Always include the interceptor wrapper (`data` and `meta`)
+- Show realistic response data, not just structure
+- Include actual timestamps and paths
+
+### 4. No Parameter Breakdowns
+
+- Let the HTTP request format be self-documenting
+- Don't list parameters separately - Swagger UI already shows them
+- Focus on the actual request/response flow
+
+### 5. Minimal Examples
+
+- One example per parameter type maximum
+- Remove excessive variations and edge cases
+- Focus on common usage patterns
+
+## ApiQuery Descriptions
+
+Keep descriptions short and consistent:
+
+```typescript
+// Good
+description: 'Start date (ISO 8601)';
+description: 'Page number (default: 1)';
+description: 'Items per page (default: 10, max: 100)';
+
+// Bad
+description: 'Start date for filtering users (inclusive). Users created on or after this date will be included.';
+description: 'Page number for pagination. Must be a positive integer.';
+```
+
+## Request Types
+
+### GET with Query Parameters
+
+```typescript
+**Request Format:**
+\`\`\`http
+GET /api/users?startDate=2024-01-01T00:00:00.000Z&endDate=2024-12-31T23:59:59.999Z&page=1&limit=10
+\`\`\`
+```
+
+### POST with Body
+
+```typescript
+**Request Format:**
+\`\`\`http
+POST /api/users
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "username": "johndoe",
+  "role": "USER"
+}
+\`\`\`
+```
+
+### PUT with Path + Body
+
+```typescript
+**Request Format:**
+\`\`\`http
+PUT /api/users/123e4567-e89b-12d3-a456-426614174000
+Content-Type: application/json
+
+{
+  "email": "newemail@example.com",
+  "username": "newusername"
+}
+\`\`\`
+```
+
+### File Upload
+
+```typescript
+**Request Format:**
+\`\`\`http
+POST /api/users/123e4567-e89b-12d3-a456-426614174000/avatar
+Content-Type: multipart/form-data
+
+--boundary
+Content-Disposition: form-data; name="file"; filename="avatar.jpg"
+Content-Type: image/jpeg
+
+[binary data]
+--boundary--
+\`\`\`
+```
+
+## Response Format
+
+Always use the interceptor structure:
+
+```json
+{
+  "data": {
+    // Actual response data
+  },
+  "meta": {
+    "timestamp": "2025-01-05T01:48:10.478Z",
+    "path": "/api/endpoint?param1=value1"
+  }
+}
+```
+
+## Code Block Styling
+
+- Use black text on light background for readability
+- Ensure proper syntax highlighting
+- Keep code blocks focused and relevant
+
+## Examples to Avoid
+
+❌ **Verbose parameter lists:**
+
+```typescript
+**Path Parameters:**
+- `id` - User ID (UUID)
+
+**Query Parameters:**
+- `includeDeleted` - Include soft-deleted users (boolean)
+- `page` - Page number (default: 1)
+
+**Request Body:**
+- `email` - User email (string, required)
+- `username` - Username (string, optional)
+```
+
+❌ **Excessive code examples:**
+
+```typescript
+// 50+ lines of JavaScript/Python/TypeScript examples
+// Multiple language implementations
+// Complex error handling examples
+```
+
+❌ **Over-engineered examples:**
+
+```typescript
+examples: {
+  'start-of-year': { /* ... */ },
+  'start-of-month': { /* ... */ },
+  'specific-date': { /* ... */ },
+  'last-30-days': { /* ... */ },
+  'business-hours': { /* ... */ },
+  // ... 10+ more variations
+}
+```
+
+## Benefits
+
+- **Fast to read**: Developers can scan and understand instantly
+- **Copy-paste ready**: HTTP examples can be used directly
+- **Less maintenance**: No need to keep parameter lists in sync
+- **Consistent**: Same structure across all endpoints
+- **Focused**: Shows what developers actually need

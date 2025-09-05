@@ -25,8 +25,29 @@ export class UserControllerDeleteUserSchemas {
     ) => {
       ApiOperation({
         summary: 'Delete user by ID',
-        description:
-          'Soft deletes a user by their unique identifier (ULID format). The user will be marked as deleted but not permanently removed.',
+        description: `Soft delete a user by their unique identifier.
+
+**Request Format:**
+\`\`\`http
+DELETE /api/users/01HZ123456789ABCDEFGHIJKLMN
+\`\`\`
+
+**Path Parameters:**
+- \`id\` - User ID (ULID)
+
+**Response Format:**
+\`\`\`json
+{
+  "data": {
+    "id": "01HZ123456789ABCDEFGHIJKLMN",
+    "deletedAt": "2025-01-05T01:48:10.478Z"
+  },
+  "meta": {
+    "timestamp": "2025-01-05T01:48:10.478Z",
+    "path": "/api/users/01HZ123456789ABCDEFGHIJKLMN"
+  }
+}
+\`\`\``,
       })(target, propertyKey, descriptor);
 
       ApiParam(CommonApiSchemas.ulidParamSchema)(

@@ -33,7 +33,7 @@ export abstract class BaseException extends Error {
     this._code = code;
     this._statusCode = statusCode;
     this._details = details;
-    this._timestamp = new TimestampVO();
+    this._timestamp = TimestampVO.create();
   }
 
   /**

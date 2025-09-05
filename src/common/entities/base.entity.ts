@@ -1,5 +1,5 @@
-import { UlidVO } from '../value_objects/ulid.vo';
 import { TimestampVO } from '../value_objects/timestamp.vo';
+import { UlidVO } from '../value_objects/ulid.vo';
 
 /**
  * Abstract base class for all domain entities.
@@ -58,14 +58,18 @@ export abstract class BaseEntity {
    * Updates the entity's timestamp to the current time.
    */
   protected updateTimestamp(): BaseEntity {
-    return this.createCopyWithTimestamp(new TimestampVO(), this._deletedAt);
+    return this.createCopyWithTimestamp(TimestampVO.create(), this._deletedAt);
   }
 
   /**
    * Soft deletes the entity by setting the deletedAt timestamp.
+   * Updates the updatedAt and deletedAt timestamps to the current time.
    */
   public delete(): BaseEntity {
-    return this.createCopyWithTimestamp(new TimestampVO(), new TimestampVO());
+    return this.createCopyWithTimestamp(
+      TimestampVO.create(),
+      TimestampVO.create(),
+    );
   }
 
   /**

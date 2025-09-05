@@ -25,8 +25,33 @@ export class UserControllerGetUserSchemas {
     ) => {
       ApiOperation({
         summary: 'Get user by ID',
-        description:
-          'Retrieves a specific user by their unique identifier (ULID format).',
+        description: `Retrieve a specific user by their unique identifier.
+
+**Request Format:**
+\`\`\`http
+GET /api/users/01HZ123456789ABCDEFGHIJKLMN
+\`\`\`
+
+**Path Parameters:**
+- \`id\` - User ID (ULID)
+
+**Response Format:**
+\`\`\`json
+{
+  "data": {
+    "id": "01HZ123456789ABCDEFGHIJKLMN",
+    "email": "john.doe@example.com",
+    "username": "johndoe",
+    "createdAt": "2024-03-15T10:30:00.000Z",
+    "updatedAt": "2024-03-15T10:30:00.000Z",
+    "deletedAt": null
+  },
+  "meta": {
+    "timestamp": "2025-01-05T01:48:10.478Z",
+    "path": "/api/users/01HZ123456789ABCDEFGHIJKLMN"
+  }
+}
+\`\`\``,
       })(target, propertyKey, descriptor);
 
       ApiParam(CommonApiSchemas.ulidParamSchema)(

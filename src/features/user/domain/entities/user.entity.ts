@@ -29,9 +29,9 @@ export class UserEntity extends BaseEntity {
    * Factory method to create a new user
    */
   public static createUser(email: EmailVO, username: UsernameVO): UserEntity {
-    const now = new TimestampVO();
+    const now = TimestampVO.create();
     return new UserEntity(
-      new UlidVO(),
+      UlidVO.create(),
       now,
       now,
       null,
@@ -83,7 +83,7 @@ export class UserEntity extends BaseEntity {
     return UserEntity.fromData(
       this.id(),
       this.createdAt(),
-      new TimestampVO(), // Update the timestamp
+      TimestampVO.create(), // Update the timestamp
       this.deletedAt(),
       email ?? this._email, // Use new email or keep existing
       this._role,

@@ -1,0 +1,72 @@
+---
+description: Auto-fix linting and update schemas when TypeScript files are modified
+globs: ['**/*.ts']
+alwaysApply: false
+---
+
+# Auto-Fix and Schema Updates
+
+## Auto Lint & Fix
+
+On File Saved
+Automatically runs ESLint checks when TypeScript files are modified and fixes any linting errors while following the project's coding style guidelines
+
+A TypeScript file has been modified. Please run `npm run lint` to check for linting errors. If there are any errors, fix them by running `npm run lint` (which auto-fixes) and ensure the code follows the project's coding style guidelines including: single quotes, trailing commas, 80 character width, proper TypeScript conventions, and the Clean Architecture patterns used in this NestJS project. Pay attention to proper naming conventions (kebab-case for files, PascalCase for classes, camelCase for methods) and ensure domain layer independence.
+
+## Update Schemas
+
+on File Saved
+Automatically updates schema files when code changes are detected in the source directory
+
+Code has been updated in the source directory. Please analyze the changes and update any relevant schema files in the `src/common/schemas/` and `src/features/*/interfaces/schemas/` directories to reflect the new code structure, DTOs, entities, and API endpoints.
+
+## Schema Documentation Standard
+
+When creating or updating Swagger schemas, follow this concise standard:
+
+### Schema Structure
+
+```typescript
+description: `Brief endpoint description.
+
+**Request Format:**
+\`\`\`http
+GET /api/endpoint?param1=value1&param2=value2
+Content-Type: application/json
+
+{
+  "body": "data"
+}
+\`\`\`
+
+**Response Format:**
+\`\`\`json
+{
+  "data": { /* actual response structure */ },
+  "meta": { /* interceptor metadata */ }
+}
+\`\`\``;
+```
+
+### Key Principles
+
+- **Concise descriptions**: Use format like `'Start date (ISO 8601)'` not verbose explanations
+- **Real HTTP examples**: Show actual request format with realistic parameters
+- **Complete JSON response**: Include full response structure with interceptor wrapper
+- **No parameter breakdowns**: Let the HTTP request format be self-documenting
+- **Minimal examples**: One example per parameter type, remove excessive variations
+- **Consistent formatting**: Use same markdown structure across all schemas
+
+### ApiQuery Descriptions
+
+Keep ApiQuery descriptions short and consistent:
+
+```typescript
+description: 'Start date (ISO 8601)';
+description: 'Page number (default: 1)';
+description: 'Items per page (default: 10, max: 100)';
+```
+
+### Code Block Styling
+
+Ensure code blocks use black text on light background for readability in Swagger UI.

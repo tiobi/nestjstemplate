@@ -24,8 +24,44 @@ export class UserControllerGetUsersSchemas {
     ) => {
       ApiOperation({
         summary: 'Get paginated list of users',
-        description:
-          'Retrieves a paginated list of users with optional page and limit parameters.',
+        description: `Retrieve paginated list of users.
+
+**Request Format:**
+\`\`\`http
+GET /api/users?page=1&limit=10
+\`\`\`
+
+**Query Parameters:**
+- \`page\` - Page number (default: 1)
+- \`limit\` - Items per page (default: 10, max: 100)
+
+**Response Format:**
+\`\`\`json
+{
+  "data": {
+    "users": [
+      {
+        "id": "01HZ123456789ABCDEFGHIJKLMN",
+        "email": "john.doe@example.com",
+        "username": "johndoe",
+        "createdAt": "2024-03-15T10:30:00.000Z",
+        "updatedAt": "2024-03-15T10:30:00.000Z",
+        "deletedAt": null
+      }
+    ],
+    "pagination": {
+      "total": 1,
+      "page": 1,
+      "limit": 10,
+      "totalPages": 1
+    }
+  },
+  "meta": {
+    "timestamp": "2025-01-05T01:48:10.478Z",
+    "path": "/api/users?page=1&limit=10"
+  }
+}
+\`\`\``,
       })(target, propertyKey, descriptor);
 
       ApiQuery(CommonApiSchemas.pageQuerySchema)(

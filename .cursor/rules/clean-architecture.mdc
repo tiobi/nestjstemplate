@@ -1,0 +1,197 @@
+---
+description: Clean Architecture and DDD patterns for NestJS
+globs: ['src/features/**/*.ts', 'src/common/**/*.ts']
+alwaysApply: false
+---
+
+# Clean Architecture Rules
+
+## Layer Responsibilities
+
+### Domain Layer (`domain/`)
+
+- Contains pure business logic
+- No dependencies on external frameworks
+- Entities with business rules and invariants
+- Value objects that are immutable
+- Repository interfaces (contracts only)
+- Domain services for complex business logic
+
+### Application Layer (`application/`)
+
+- Contains use cases and application services
+- Orchestrates domain objects
+- Handles application-specific exceptions
+- No direct database or HTTP concerns
+- Coordinates between domain and infrastructure
+
+### Infrastructure Layer (`infrastructure/`)
+
+- Implements repository interfaces
+- Handles external service integrations
+- Contains framework-specific code
+- Database implementations
+- Third-party service clients
+
+### Interface Layer (`interfaces/`)
+
+- Controllers handle HTTP concerns only
+- DTOs for request/response validation
+- Mappers convert between DTOs and domain objects
+- Swagger schemas for API documentation
+
+## Dependency Rules
+
+### Dependency Direction
+
+- Dependencies point inward toward the domain
+- Domain layer has no external dependencies
+- Application layer depends only on domain
+- Infrastructure layer implements domain interfaces
+- Interface layer depends on application and domain
+
+### Dependency Injection
+
+- Use interfaces for all dependencies
+- Inject through constructor
+- Register interfaces in modules
+- Export interfaces, not implementations
+
+## Entity Patterns
+
+### Domain Entities
+
+```typescript
+export class UserEntity {
+  private constructor(
+    private readonly _id: ULIDVO,
+    private readonly _email: EmailVO,
+    private readonly _createdAt: TimestampVO,
+  ) {}
+
+  static create(email: string): UserEntity {
+    return new UserEntity(
+      ULIDVO.generate(),
+      EmailVO.create(email),
+      TimestampVO.now(),
+    );
+  }
+
+  get id(): ULIDVO {
+    return this._id;
+  }
+  get email(): EmailVO {
+    return this._email;
+  }
+  get createdAt(): TimestampVO {
+    return this._createdAt;
+  }
+}
+```
+
+### Value Objects
+
+```typescript
+export class EmailVO {
+  private constructor(private readonly _value: string) {}
+
+  static create(email: string): EmailVO {
+    if (!this.isValid(email)) {
+      throw new InvalidEmailException(email);
+    }
+    return new EmailVO(email);
+  }
+
+  private static isValid(email: string): boolean {
+    // Validation logic
+  }
+
+  get value(): string {
+    return this._value;
+  }
+}
+```
+
+## Repository Pattern
+
+### Interface (Domain Layer)
+
+```typescript
+export interface UserRepository {
+  save(user: UserEntity): Promise<void>;
+  findById(id: ULIDVO): Promise<UserEntity | null>;
+  findByEmail(email: EmailVO): Promise<UserEntity | null>;
+}
+```
+
+### Implementation (Infrastructure Layer)
+
+```typescript
+@Injectable()
+export class UserRepositoryImpl implements UserRepository {
+  constructor(private readonly firestore: Firestore) {}
+
+  async save(user: UserEntity): Promise<void> {
+    // Implementation
+  }
+
+  async findById(id: ULIDVO): Promise<UserEntity | null> {
+    // Implementation
+  }
+
+  async findByEmail(email: EmailVO): Promise<UserEntity | null> {
+    // Implementation
+  }
+}
+```
+
+## Use Case Pattern
+
+```typescript
+@Injectable()
+export class CreateUserUsecase {
+  constructor(
+    private readonly userRepository: UserRepository,
+    private readonly emailService: EmailService,
+  ) {}
+
+  async execute(request: CreateUserRequest): Promise<CreateUserResponse> {
+    // 1. Validate input
+    // 2. Create domain entity
+    // 3. Save to repository
+    // 4. Send notifications
+    // 5. Return response
+  }
+}
+```
+
+## Module Organization
+
+### Feature Module Structure
+
+```typescript
+@Module({
+  imports: [UserModule],
+  providers: [
+    {
+      provide: 'UserRepository',
+      useClass: UserRepositoryImpl,
+    },
+    CreateUserUsecase,
+    UserService,
+  ],
+  controllers: [UserController],
+  exports: ['UserRepository'], // Export interface, not implementation
+})
+export class UserModule {}
+```
+
+## Key Principles
+
+1. **Domain Independence**: Domain layer never depends on external frameworks
+2. **Interface Segregation**: Small, focused interfaces
+3. **Dependency Inversion**: Depend on abstractions, not concretions
+4. **Single Responsibility**: Each class has one reason to change
+5. **Open/Closed**: Open for extension, closed for modification
+
+Remember: Always maintain domain layer independence and follow the dependency direction rules.
