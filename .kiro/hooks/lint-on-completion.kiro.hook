@@ -1,0 +1,17 @@
+{
+  "enabled": true,
+  "name": "Auto Lint & Fix",
+  "description": "Automatically runs ESLint checks when TypeScript files are modified and fixes any linting errors while following the project's coding style guidelines",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "src/**/*.ts",
+      "test/**/*.ts"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "A TypeScript file has been modified. Please run `npm run lint` to check for linting errors. If there are any errors, fix them by running `npm run lint` (which auto-fixes) and ensure the code follows the project's coding style guidelines including: single quotes, trailing commas, 80 character width, proper TypeScript conventions, and the Clean Architecture patterns used in this NestJS project. Pay attention to proper naming conventions (kebab-case for files, PascalCase for classes, camelCase for methods) and ensure domain layer independence."
+  }
+}

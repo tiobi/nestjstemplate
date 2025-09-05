@@ -1,68 +1,68 @@
 # Implementation Plan
 
-- [-] 1. Extend repository interface and implementation
+- [x] 1. Extend repository interface and implementation
   - Add new methods to UserRepository interface for CRUD operations
   - Implement the new methods in UserRepositoryImpl with Firestore queries
   - Add proper error handling and data mapping
   - _Requirements: 1.1, 2.1, 3.1, 4.1_
 
-- [ ] 2. Create new DTOs for request/response handling
-  - [ ] 2.1 Create UpdateUserRequestDto with validation
+- [x] 2. Create new DTOs for request/response handling
+  - [x] 2.1 Create UpdateUserRequestDto with validation
     - Implement DTO class with optional email and username fields
     - Add class-validator decorators for proper validation
     - _Requirements: 3.3_
-  - [ ] 2.2 Create pagination DTOs
+  - [x] 2.2 Create pagination DTOs
     - Implement GetUsersQueryDto for pagination parameters
     - Create PaginatedUsersResponseDto and PaginationMetadataDto
     - Add validation for page and limit parameters
     - _Requirements: 2.2, 2.3, 2.4_
 
-- [ ] 3. Implement new use cases for user operations
-  - [ ] 3.1 Create GetUserByIdUsecase
+- [x] 3. Implement new use cases for user operations
+  - [x] 3.1 Create GetUserByIdUsecase
     - Implement use case to retrieve user by ID
     - Add proper error handling for user not found scenarios
     - Include ID format validation
     - _Requirements: 1.1, 1.2, 1.3_
-  - [ ] 3.2 Create GetUsersUsecase
+  - [x] 3.2 Create GetUsersUsecase
     - Implement paginated user listing functionality
     - Handle default pagination values and validation
     - Return structured response with metadata
     - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5_
-  - [ ] 3.3 Create UpdateUserUsecase
+  - [x] 3.3 Create UpdateUserUsecase
     - Implement user update logic with validation
     - Handle email uniqueness and username validation
     - Return updated user entity
     - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5_
-  - [ ] 3.4 Create DeleteUserUsecase
+  - [x] 3.4 Create DeleteUserUsecase
     - Implement soft delete functionality
     - Add proper error handling for non-existent users
     - _Requirements: 4.1, 4.2, 4.3_
 
-- [ ] 4. Create Swagger schema classes for API documentation
-  - [ ] 4.1 Create UserControllerGetUserSchemas
+- [x] 4. Create Swagger schema classes for API documentation
+  - [x] 4.1 Create UserControllerGetUserSchemas
     - Define decorators for GET /users/:id endpoint
     - Include all possible response codes and examples
     - _Requirements: 5.1, 5.2, 5.3_
-  - [ ] 4.2 Create UserControllerGetUsersSchemas
+  - [x] 4.2 Create UserControllerGetUsersSchemas
     - Define decorators for GET /users endpoint with pagination
     - Include query parameter documentation
     - _Requirements: 5.1, 5.2, 5.3_
-  - [ ] 4.3 Create UserControllerUpdateUserSchemas
+  - [x] 4.3 Create UserControllerUpdateUserSchemas
     - Define decorators for PUT /users/:id endpoint
     - Include request body and response documentation
     - _Requirements: 5.1, 5.2, 5.3_
-  - [ ] 4.4 Create UserControllerDeleteUserSchemas
+  - [x] 4.4 Create UserControllerDeleteUserSchemas
     - Define decorators for DELETE /users/:id endpoint
     - Include response documentation
     - _Requirements: 5.1, 5.2, 5.3_
 
-- [ ] 5. Enhance UserController with new endpoints
-  - [ ] 5.1 Add GET /users/:id endpoint
+- [-] 5. Enhance UserController with new endpoints
+  - [x] 5.1 Add GET /users/:id endpoint
     - Implement controller method with proper validation
     - Add Swagger decorators and error handling
     - Use GetUserByIdUsecase for business logic
     - _Requirements: 1.1, 1.2, 1.3, 5.4_
-  - [ ] 5.2 Add GET /users endpoint with pagination
+  - [x] 5.2 Add GET /users endpoint with pagination
     - Implement controller method with query parameter handling
     - Add pagination validation and default values
     - Use GetUsersUsecase for business logic

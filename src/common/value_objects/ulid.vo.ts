@@ -17,8 +17,10 @@ export class UlidVO {
     ) {
       throw new Error('Invalid ULID format');
     }
-    const instance = Object.create(UlidVO.prototype);
-    instance._value = value.toUpperCase();
+    const instance = Object.create(UlidVO.prototype) as UlidVO & {
+      _value: string;
+    };
+
     return instance;
   }
 

@@ -1,4 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { UlidVO } from 'src/common/value_objects/ulid.vo';
+import { UserNotFoundException } from '../../application/exceptions/user-not-found.exception';
 import { UserEntity } from '../../domain/entities/user.entity';
 import { UserRepository } from '../../domain/repositories/user.repository.interface';
 import { EmailVO } from '../../domain/value_objects/email.vo';
@@ -89,8 +91,9 @@ export class UserRepositoryImpl extends UserRepository {
   async update(user: UserEntity): Promise<void> {
     await new Promise((resolve) => setTimeout(resolve, 10));
 
-    if (!this.mockUsers.has(user.id().value)) {
-      throw new Error('User not found');
+    const existingUser = this.mockUsers.get(user.id().value);
+    if (!existingUser || existingUser.deletedAt()) {
+      throw new UserNotFoundException(user.id().value);
     }
 
     this.mockUsers.set(user.id().value, user);
@@ -101,11 +104,11 @@ export class UserRepositoryImpl extends UserRepository {
 
     const user = this.mockUsers.get(id.value);
     if (!user || user.deletedAt()) {
-      throw new Error('User not found');
+      throw new UserNotFoundException(id.value);
     }
 
     // Perform soft delete
-    const deletedUser = user.delete();
+    const deletedUser = user.delete() as UserEntity;
     this.mockUsers.set(id.value, deletedUser);
   }
 }

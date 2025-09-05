@@ -76,6 +76,21 @@ export class UserEntity extends BaseEntity {
     return this._username;
   }
 
+  /**
+   * Updates the user with new email and/or username
+   */
+  public updateUser(email?: EmailVO, username?: UsernameVO): UserEntity {
+    return UserEntity.fromData(
+      this.id(),
+      this.createdAt(),
+      new TimestampVO(), // Update the timestamp
+      this.deletedAt(),
+      email ?? this._email, // Use new email or keep existing
+      this._role,
+      username ?? this._username, // Use new username or keep existing
+    );
+  }
+
   protected override createCopyWithTimestamp(
     updatedAt: TimestampVO,
     deletedAt: TimestampVO | null,
