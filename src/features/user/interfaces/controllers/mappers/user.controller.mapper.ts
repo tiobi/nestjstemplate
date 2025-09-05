@@ -1,5 +1,6 @@
 import { GetUsersResult } from 'src/features/user/application/usecases/get-users.usecase';
 import { UserEntity } from 'src/features/user/domain/entities/user.entity';
+import { DeleteUserResponseDto } from '../../dto/delete-user.response.dto';
 import { PaginatedUsersResponseDto } from '../../dto/paginated-users.response.dto';
 import { UserResponseDto } from '../../dto/user.response.dto';
 
@@ -34,6 +35,13 @@ export class UserControllerMapper {
         limit,
         totalPages,
       },
+    };
+  }
+
+  static toDeleteResponseDto(userId: string): DeleteUserResponseDto {
+    return {
+      message: 'User successfully deleted',
+      userId,
     };
   }
 }

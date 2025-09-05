@@ -3,6 +3,7 @@ import { CreateNewUserUsecase } from '../application/usecases/create-new-user.us
 import { GetUserByIdUsecase } from '../application/usecases/get-user-by-id.usecase';
 import { GetUsersByDateRangeUsecase } from '../application/usecases/get-users-by-date-range.usecase';
 import { GetUsersUsecase } from '../application/usecases/get-users.usecase';
+import { SoftDeleteUserUsecase } from '../application/usecases/soft-delete-user.usecase';
 import { UserRepository } from '../domain/repositories/user.repository.interface';
 import { UserRepositoryImpl } from '../infrastructure/firestore/user.repository.impl';
 import { UserController } from '../interfaces/controllers/user.controller';
@@ -15,6 +16,7 @@ import { UserController } from '../interfaces/controllers/user.controller';
     GetUserByIdUsecase,
     GetUsersUsecase,
     GetUsersByDateRangeUsecase,
+    SoftDeleteUserUsecase,
   ],
   exports: [UserRepository],
 })

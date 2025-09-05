@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -15,12 +16,15 @@ import { CreateNewUserUsecase } from '../../application/usecases/create-new-user
 import { GetUserByIdUsecase } from '../../application/usecases/get-user-by-id.usecase';
 import { GetUsersByDateRangeUsecase } from '../../application/usecases/get-users-by-date-range.usecase';
 import { GetUsersUsecase } from '../../application/usecases/get-users.usecase';
+import { SoftDeleteUserUsecase } from '../../application/usecases/soft-delete-user.usecase';
 import { CreateUserRequestDto } from '../dto/create-user.request.dto';
+import { DeleteUserResponseDto } from '../dto/delete-user.response.dto';
 import { GetUsersByDateRangeQueryDto } from '../dto/get-users-by-date-range.query.dto';
 import { GetUsersQueryDto } from '../dto/get-users.query.dto';
 import { PaginatedUsersResponseDto } from '../dto/paginated-users.response.dto';
 import { UserResponseDto } from '../dto/user.response.dto';
 import { UserControllerCreateUserSchemas } from '../schemas/user-controller.create-user.schemas';
+import { UserControllerDeleteUserSchemas } from '../schemas/user-controller.delete-user.schemas';
 import { UserControllerGetUserSchemas } from '../schemas/user-controller.get-user.schemas';
 import { UserControllerGetUsersByDateRangeSchemas } from '../schemas/user-controller.get-users-by-date-range.schemas';
 import { UserControllerGetUsersSchemas } from '../schemas/user-controller.get-users.schemas';
@@ -34,6 +38,7 @@ export class UserController {
     private readonly getUserByIdUsecase: GetUserByIdUsecase,
     private readonly getUsersUsecase: GetUsersUsecase,
     private readonly getUsersByDateRangeUsecase: GetUsersByDateRangeUsecase,
+    private readonly softDeleteUserUsecase: SoftDeleteUserUsecase,
   ) {}
 
   @Get()
@@ -82,5 +87,15 @@ export class UserController {
     );
 
     return UserControllerMapper.toResponseDto(user);
+  }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.OK)
+  @UserControllerDeleteUserSchemas.deleteUserDecorators()
+  async deleteUser(@Param('id') id: string): Promise<DeleteUserResponseDto> {
+    await this.softDeleteUserUsecase.execute(id);
+    return UserControllerMapper.toDeleteResponseDto(
+      id,
+    ) as DeleteUserResponseDto;
   }
 }

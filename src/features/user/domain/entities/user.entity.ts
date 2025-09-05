@@ -91,6 +91,22 @@ export class UserEntity extends BaseEntity {
     );
   }
 
+  /**
+   * Soft deletes the user by setting the deletedAt timestamp
+   */
+  public softDelete(): UserEntity {
+    const deletedEntity = this.delete();
+    return UserEntity.fromData(
+      deletedEntity.id(),
+      deletedEntity.createdAt(),
+      deletedEntity.updatedAt(),
+      deletedEntity.deletedAt(),
+      this._email,
+      this._role,
+      this._username,
+    );
+  }
+
   protected override createCopyWithTimestamp(
     updatedAt: TimestampVO,
     deletedAt: TimestampVO | null,

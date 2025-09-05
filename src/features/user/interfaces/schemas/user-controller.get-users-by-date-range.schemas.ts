@@ -53,7 +53,7 @@ GET /api/users/by-date-range?startDate=2024-01-01T00:00:00.000Z&endDate=2024-12-
 }
 \`\`\``,
 
-        tags: ['Users', 'Filtering', 'Date Range'],
+        tags: ['Users'],
       }),
       ApiQuery({
         name: 'startDate',

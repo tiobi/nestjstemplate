@@ -56,24 +56,36 @@ src/features/{feature-name}/
 ├── core/                   # Module definition and DI setup
 ├── domain/                 # Business logic layer
 │   ├── entities/          # Domain entities with business rules
+│   │   └── .specs/        # Entity test files
 │   ├── value_objects/     # Immutable value objects
+│   │   └── .specs/        # Value object test files
 │   ├── enums/             # Domain enums
 │   ├── repositories/      # Repository interfaces
+│   │   └── .specs/        # Repository test files
 │   └── services/          # Domain services
+│       └── .specs/        # Domain service test files
 ├── application/           # Use cases layer
 │   ├── usecases/         # Application use cases
+│   │   └── .specs/        # Use case test files
 │   ├── services/         # Application services
+│   │   └── .specs/        # Application service test files
 │   └── exceptions/       # Application-specific exceptions
 ├── infrastructure/        # External concerns layer
 │   ├── firestore/        # Database implementations
+│   │   └── .specs/        # Database test files
 │   ├── config/           # Infrastructure configuration
 │   └── mappers/          # Data mapping utilities
+│       └── .specs/        # Mapper test files
 └── interfaces/           # API layer
     ├── controllers/      # HTTP controllers
+    │   └── .specs/        # Controller test files
     ├── dto/              # Data Transfer Objects
+    │   └── .specs/        # DTO test files
     ├── schemas/          # API documentation schemas
     ├── pipes/            # Custom validation pipes
+    │   └── .specs/        # Pipe test files
     └── validators/       # Custom validators
+        └── .specs/        # Validator test files
 ```
 
 ### Common Shared Code (`src/common/`)
@@ -81,13 +93,21 @@ src/features/{feature-name}/
 ```
 src/common/
 ├── entities/             # Base entity classes
+│   └── .specs/           # Base entity test files
 ├── value_objects/        # Shared value objects (ULID, Timestamp)
+│   └── .specs/           # Value object test files
 ├── exceptions/           # Base exception classes
+│   └── .specs/           # Exception test files
 ├── filters/              # Global exception filters
+│   └── .specs/           # Filter test files
 ├── guards/               # Authentication/authorization guards
+│   └── .specs/           # Guard test files
 ├── interceptors/         # Request/response interceptors
+│   └── .specs/           # Interceptor test files
 ├── pipes/                # Global validation pipes
+│   └── .specs/           # Pipe test files
 ├── services/             # Shared services (logging, etc.)
+│   └── .specs/           # Service test files
 └── types/                # TypeScript type definitions
 ```
 
@@ -294,6 +314,35 @@ When code changes are detected in the source directory:
 4. Maintain consistency between code and documentation
 5. Update Swagger/OpenAPI schemas when applicable
 
+## Testing Structure & Organization
+
+### Spec File Organization
+
+All test files are organized in `.specs` folders following the same directory structure as source files:
+
+```
+src/features/user/domain/entities/
+├── user.entity.ts
+└── .specs/
+    └── user.entity.spec.ts
+
+src/common/services/
+├── app-logger.service.ts
+└── .specs/
+    └── app-logger.service.spec.ts
+```
+
+### Spec File Naming Convention
+
+- **Extension**: `.spec.ts` (Jest configured for both `.spec.ts` and `.specs.ts`)
+- **Location**: `.specs` subfolder within the same directory as source file
+- **Naming**: Same filename as source file with `.spec.ts` suffix
+- **Structure**: Mirror the source file's directory structure
+
+### Auto-Creation of Spec Files
+
+The project automatically creates corresponding spec files when TypeScript files are modified, following TDD principles and Clean Architecture patterns.
+
 ## Testing Requirements
 
 - Write unit tests for all services and utilities
@@ -301,6 +350,7 @@ When code changes are detected in the source directory:
 - Use proper test descriptions and arrange-act-assert pattern
 - Mock external dependencies appropriately
 - Ensure test coverage for critical business logic
+- Follow the `.specs` folder organization structure
 
 ## Error Handling
 
